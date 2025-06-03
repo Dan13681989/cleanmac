@@ -1,24 +1,45 @@
-#!/bin/sh
+#!/bin/bash
+
+# cleanmac.sh - A powerful system tool for cleanup and bootable USB creation
+# Author: Dan13681989
+# License: MIT
 
 echo "[cleanmac] Starting Cleanmac tool..."
-
 echo "[cleanmac] This script is under active development."
 
-# Basic environment info
+# ===============================
+# Basic Environment Diagnostics
+# ===============================
 echo "[cleanmac] Performing basic environment checks..."
 uname -a
-
-# Disk usage check
-echo "[cleanmac] Checking disk usage..."
 df -h /
 
-# === Feature Modules ===
+# ===============================
+# Interactive Menu
+# ===============================
+show_menu() {
+  echo ""
+  echo "===== Cleanmac Menu ====="
+  echo "1) System Cleanup"
+  echo "2) Create Bootable USB"
+  echo "q) Quit"
+  echo "========================="
+  read -p "Choose an option: " choice
+  case "$choice" in
+    1) cleanup_system ;;
+    2) create_bootable_usb ;;
+    q|Q) echo "[cleanmac] Goodbye!" && exit 0 ;;
+    *) echo "[cleanmac] Invalid option. Try again." && show_menu ;;
+  esac
+}
 
-# System Cleanup Module
+# ===============================
+# Cleanup System Function
+# ===============================
 cleanup_system() {
   echo "[cleanmac] Starting system cleanup..."
 
-  read -p "Do you want to proceed with cleaning temporary files, logs, and caches? (y/n): " confirm
+  read -p "Proceed with cleaning temporary files, logs, and caches? (y/n): " confirm
   if [ "$confirm" != "y" ]; then
     echo "[cleanmac] Cleanup aborted."
     return
@@ -33,7 +54,7 @@ cleanup_system() {
   echo "[cleanmac] Cleaning temporary files..."
   sudo rm -rf /private/tmp/* /tmp/* 2>/dev/null
 
-  echo "[cleanmac] Cleaning trash..."
+  echo "[cleanmac] Cleaning Trash..."
   rm -rf ~/.Trash/* 2>/dev/null
 
   read -p "Do you want to clean ~/Downloads as well? (y/n): " clean_dl
@@ -44,7 +65,43 @@ cleanup_system() {
   echo "[cleanmac] Cleanup complete."
 }
 
-# === Launch menu (example call) ===
-cleanup_system
+# ===============================
+# Bootable USB Creator Function
+# ===============================
+create_bootable_usb() {
+  echo "[cleanmac] Starting bootable USB creator..."
 
-echo "[cleanmac] Cleanmac execution complete."
+  read -p "Enter the path to the ISO file (e.g., ~/Downloads/ubuntu.iso): " iso_path
+  if [ ! -f "$iso_path" ]; then
+    echo "[cleanmac] ISO file not found at $iso_path"
+    return
+  fi
+
+  echo "[cleanmac] Available disks:"
+  diskutil list
+
+  read -p "Enter the disk identifier (e.g., disk2): " disk_id
+  if [ -z "$disk_id" ]; then
+    echo "[cleanmac] Invalid disk identifier."
+    return
+  fi
+
+  echo "[cleanmac] WARNING: This will erase /dev/$disk_id!"
+  read -p "Are you sure? (y/n): " confirm_disk
+  if [ "$confirm_disk" != "y" ]; then
+    echo "[cleanmac] Operation cancelled."
+    return
+  fi
+
+  diskutil unmountDisk /dev/$disk_id
+  sudo dd if="$iso_path" of=/dev/r$disk_id bs=1m status=progress
+  sync
+  diskutil eject /dev/$disk_id
+
+  echo "[cleanmac] Bootable USB created successfully."
+}
+
+# ===============================
+# Launch the Menu
+# ===============================
+show_menu
