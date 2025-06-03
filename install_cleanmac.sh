@@ -1,6 +1,7 @@
 #!/bin/sh
 
-# Variables
+# install_cleanmac.sh - Downloads and runs the latest cleanmac.sh
+
 REPO_RAW_BASE="https://raw.githubusercontent.com/Dan13681989/cleanmac/main"
 SCRIPT_NAME="cleanmac.sh"
 INSTALL_PATH="/tmp/$SCRIPT_NAME"
