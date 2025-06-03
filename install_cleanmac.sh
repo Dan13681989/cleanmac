@@ -1,7 +1,6 @@
 #!/bin/sh
 
-# Installer for cleanmac
-
+# Variables
 REPO_RAW_BASE="https://raw.githubusercontent.com/Dan13681989/cleanmac/main"
 SCRIPT_NAME="cleanmac.sh"
 INSTALL_PATH="/tmp/$SCRIPT_NAME"
@@ -28,4 +27,5 @@ echo "[install_cleanmac] Running cleanmac.sh..."
 sh "$INSTALL_PATH"
 
 echo "[install_cleanmac] Finished."
+
 exit 0
