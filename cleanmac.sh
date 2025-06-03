@@ -1,27 +1,30 @@
-#!/bin/sh
+cleanup_system() {
+  echo "[cleanmac] Starting system cleanup..."
 
-# cleanmac.sh - Main system tool for cleanup and diagnostics
+  # Confirm action
+  read -p "Do you want to proceed with cleaning temporary files, logs, and caches? (y/n): " confirm
+  if [ "$confirm" != "y" ]; then
+    echo "[cleanmac] Cleanup aborted."
+    return
+  fi
 
-echo "[cleanmac] Starting Cleanmac tool..."
-echo "[cleanmac] This script is under active development."
+  echo "[cleanmac] Cleaning user cache..."
+  rm -rf ~/Library/Caches/* ~/.cache/* 2>/dev/null
 
-# Placeholder for future full functionality
-# You can add functions here for:
-# - Cleanup
-# - AI diagnostics
-# - Hardware checks
-# - Update verification
-# - USB boot tool
-# - Multilingual accessibility
-# - Cloud sync
-# - Error code catalog
-# - and more
+  echo "[cleanmac] Cleaning system logs..."
+  sudo rm -rf /private/var/log/* /Library/Logs/* /var/log/* 2>/dev/null
 
-# Example stub logic
-echo "[cleanmac] Performing basic environment checks..."
-uname -a
-echo "[cleanmac] Checking disk usage..."
-df -h /
+  echo "[cleanmac] Cleaning temporary files..."
+  sudo rm -rf /private/tmp/* /tmp/* 2>/dev/null
 
-echo "[cleanmac] Cleanmac execution complete."
-exit 0
+  echo "[cleanmac] Cleaning trash..."
+  rm -rf ~/.Trash/* 2>/dev/null
+
+  echo "[cleanmac] Optionally cleaning Downloads..."
+  read -p "Do you want to clean ~/Downloads as well? (y/n): " clean_dl
+  if [ "$clean_dl" = "y" ]; then
+    rm -rf ~/Downloads/* 2>/dev/null
+  fi
+
+  echo "[cleanmac] Cleanup complete."
+}
