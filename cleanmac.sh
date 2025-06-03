@@ -29,7 +29,7 @@ show_menu() {
     1) cleanup_system ;;
     2) create_bootable_usb ;;
     q|Q) echo "[cleanmac] Goodbye!" && exit 0 ;;
-    *) echo "[cleanmac] Invalid option. Try again." && show_menu ;;
+    *) echo "[cleanmac] Invalid option. Try again." ;;
   esac
 }
 
@@ -72,6 +72,9 @@ create_bootable_usb() {
   echo "[cleanmac] Starting bootable USB creator..."
 
   read -p "Enter the path to the ISO file (e.g., ~/Downloads/ubuntu.iso): " iso_path
+  # Expand ~ in path
+  iso_path="${iso_path/#\~/$HOME}"
+  
   if [ ! -f "$iso_path" ]; then
     echo "[cleanmac] ISO file not found at $iso_path"
     return
@@ -93,15 +96,23 @@ create_bootable_usb() {
     return
   fi
 
+  echo "[cleanmac] Unmounting disk..."
   diskutil unmountDisk /dev/$disk_id
+
+  echo "[cleanmac] Writing ISO to USB... This may take some time."
   sudo dd if="$iso_path" of=/dev/r$disk_id bs=1m status=progress
+
+  echo "[cleanmac] Syncing disk buffers..."
   sync
+
   diskutil eject /dev/$disk_id
 
   echo "[cleanmac] Bootable USB created successfully."
 }
 
 # ===============================
-# Launch the Menu
+# Main Loop to keep showing menu
 # ===============================
-show_menu
+while true; do
+  show_menu
+done
