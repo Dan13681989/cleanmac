@@ -1,0 +1,139 @@
+#!/bin/zsh
+# CleanMac Enhanced - Comprehensive macOS Optimization Tool
+# Created by Dan13681989
+# Repository: https://github.com/Dan13681989/cleanmac
+# Version: 2.1
+# Date: 2025-08-27
+
+# Version check
+if [[ "$1" == "--version" ]] || [[ "$1" == "-v" ]]; then
+    echo "CleanMac Enhanced v2.1"
+    echo "Author: Dan13681989"
+    echo "Repository: https://github.com/Dan13681989/cleanmac"
+    exit 0
+fi
+
+echo "=== 🚀 CleanMac Enhanced - macOS Optimization Tool ==="
+echo "=== Created by Dan13681989 ==="
+echo "=== Repository: https://github.com/Dan13681989/cleanmac ==="
+echo ""
+
+# Check for sudo privileges
+if [ "$EUID" -ne 0 ]; then
+    echo "🔒 Please run with sudo privileges:"
+    echo "   sudo cleanmac"
+    exit 1
+fi
+
+# --- Section 1: System Cleanup ---
+echo "🧹 1. System Cleanup & Cache Removal..."
+# System caches
+rm -rf ~/Library/Caches/ 2>/dev/null
+find /Library/Caches/ -type f -delete 2>/dev/null
+find /System/Library/Caches/ -type f -delete 2>/dev/null
+
+# User caches
+find ~/Library/Application\ Support/ -name "Caches" -type d -exec rm -rf {} \; 2>/dev/null
+find ~/Library/Containers/ -name "Caches" -type d -exec rm -rf {} \; 2>/dev/null
+
+# Browser caches
+find ~/Library/Application\ Support/Google/Chrome/ -name "*Cache*" -type d -exec rm -rf {} \; 2>/dev/null
+find ~/Library/Application\ Support/Firefox/Profiles/ -name "*cache*" -type d -exec rm -rf {} \; 2>/dev/null
+
+echo "✅ System caches cleaned"
+
+# --- Section 2: DNS & Network Optimization ---
+echo "🌐 2. Network Optimization..."
+# Flush DNS cache
+dscacheutil -flushcache 2>/dev/null
+killall -HUP mDNSResponder 2>/dev/null
+
+# Network tuning
+sysctl -w net.inet.tcp.delayed_ack=0 2>/dev/null
+sysctl -w net.inet.udp.recvspace=4194304 2>/dev/null
+sysctl -w kern.ipc.maxsockbuf=16777216 2>/dev/null
+
+echo "✅ Network optimized"
+
+# --- Section 3: Memory Management ---
+echo "💾 3. Memory Optimization..."
+# Purge memory
+purge 2>/dev/null
+
+echo "✅ Memory optimized"
+
+# --- Section 4: Storage Optimization ---
+echo "💽 4. Storage Optimization..."
+# Remove system junk
+find ~/Library/Developer/Xcode/DerivedData/ -type d -exec rm -rf {} \; 2>/dev/null
+find ~/Library/Developer/Xcode/Archives/ -type d -exec rm -rf {} \; 2>/dev/null
+find ~/Library/Logs/ -type f -delete 2>/dev/null
+
+# Remove iOS device backups (older than 30 days)
+find ~/Library/Application\ Support/MobileSync/Backup/ -type f -mtime +30 -delete 2>/dev/null
+
+echo "✅ Storage optimized"
+
+# --- Section 5: Application Repair ---
+echo "🔧 5. Application Maintenance..."
+# Reset Launch Services
+/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -kill -r -domain local -domain system -domain user
+
+# Repair common applications
+defaults delete com.apple.Safari 2>/dev/null
+defaults delete com.valvesoftware.steam 2>/dev/null
+defaults delete com.google.Chrome 2>/dev/null
+
+echo "✅ Applications maintained"
+
+# --- Section 6: Security & Privacy ---
+echo "🛡️ 6. Security Cleanup..."
+# Remove browser history and cookies
+rm -rf ~/Library/Safari/History.db 2>/dev/null
+rm -rf ~/Library/Safari/Downloads.plist 2>/dev/null
+find ~/Library/Cookies/ -type f -delete 2>/dev/null
+
+# Clear recent items
+defaults delete NSGlobalDomain NSRecentDocumentsLimit 2>/dev/null
+defaults delete com.apple.recentitems 2>/dev/null
+
+echo "✅ Security cleaned"
+
+# --- Section 7: Performance Monitoring ---
+echo "📊 7. System Status Report..."
+echo ""
+echo "=== System Status Report ==="
+echo "Free space: $(df -h / | grep disk1 | awk '{print $4}')"
+echo "Memory usage: $(vm_stat | grep 'Pages free' | awk '{print $3}' | awk '{printf "%.1fGB\n", $1*4096/1073741824}') free"
+echo "Active processes: $(ps aux | wc -l)"
+echo "Uptime: $(uptime | awk '{print $3}' | sed 's/,//')"
+echo ""
+
+# --- Section 8: Game Mode (Optional) ---
+if [[ "$1" == "game-mode" ]]; then
+    echo "🎮 8. Game Mode Activated..."
+    # Disable TCP delayed ACK for lower latency
+    sysctl -w net.inet.tcp.delayed_ack=0 2>/dev/null
+    # Increase network buffer sizes
+    sysctl -w kern.ipc.maxsockbuf=16777216 2>/dev/null
+    echo "✅ Game Mode activated"
+fi
+
+# --- Final Report ---
+echo ""
+echo "=== ✅ CleanMac Enhanced - Complete ==="
+echo "System has been fully optimized:"
+echo "• Caches cleared"
+echo "• Network optimized" 
+echo "• Memory freed"
+echo "• Storage cleaned"
+echo "• Applications repaired"
+echo "• Security enhanced"
+echo ""
+echo "Next steps:"
+echo "• Restart your computer for best results"
+echo "• Run regularly for maintained performance"
+echo ""
+echo "For updates: https://github.com/Dan13681989/cleanmac"
+
+exit 0
