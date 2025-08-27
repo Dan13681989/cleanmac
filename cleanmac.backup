@@ -1,10 +1,4 @@
 #!/bin/zsh
-if [ "$1" = "--version" ]; then
-    echo "CleanMac Enhanced v2.1"
-    echo "Author: Dan13681989"
-    echo "Repository: https://github.com/Dan13681989/cleanmac"
-    exit 0
-fi
 # CleanMac Enhanced - Comprehensive macOS Optimization Tool
 # Created by Dan13681989
 # Repository: https://github.com/Dan13681989/cleanmac
