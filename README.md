@@ -28,3 +28,5 @@ git clone https://github.com/Dan13681989/cleanmac.git
 cd cleanmac
 ./cleanmac.sh
 ```
+```bash
+bash <(curl -sSL https://raw.githubusercontent.com/Dan13681989/cleanmac/main/install.sh)
