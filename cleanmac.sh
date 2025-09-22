@@ -22,12 +22,14 @@ show_menu() {
   echo "===== Cleanmac Menu ====="
   echo "1) System Cleanup"
   echo "2) Create Bootable USB"
+  echo "3) Fix Hotspot Stability"
   echo "q) Quit"
   echo "========================="
   read -p "Choose an option: " choice
   case "$choice" in
     1) cleanup_system ;;
     2) create_bootable_usb ;;
+    3) fix_hotspot ;;
     q|Q) echo "[cleanmac] Goodbye!" && exit 0 ;;
     *) echo "[cleanmac] Invalid option. Try again." ;;
   esac
@@ -108,6 +110,24 @@ create_bootable_usb() {
   diskutil eject /dev/$disk_id
 
   echo "[cleanmac] Bootable USB created successfully."
+}
+
+# ===============================
+# Hotspot Stability Fix Function
+# ===============================
+fix_hotspot() {
+  echo "[cleanmac] Starting hotspot stability fix..."
+  
+  # Check if Python script exists
+  if [ ! -f "hotspot_fix.py" ]; then
+    echo "[cleanmac] Error: hotspot_fix.py not found!"
+    return 1
+  fi
+  
+  echo "[cleanmac] Applying hotspot stability fixes..."
+  python3 hotspot_fix.py
+  
+  read -p "Press Enter to continue..."
 }
 
 # ===============================
