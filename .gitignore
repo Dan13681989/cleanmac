@@ -8,14 +8,30 @@
 *.temp
 *.log
 
-# Development
-node_modules/
-.nvm/
+# Backup files
+*.backup
+*.bak
+
+# Python
+__pycache__/
+*.py[cod]
+*.class
+*.so
+.Python
+env/
+venv/
+.venv/
+
+# Logs
+*.log
+logs/
+
+# IDE
 .vscode/
 .idea/
 *.swp
 *.swo
 
-# System files
-*.backup
-*.bak
+# CleanMac specific
+cleanmac_logs/
+*.log.*
