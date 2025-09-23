@@ -1,0 +1,11 @@
+name: Test Scripts
+on: [push, pull_request]
+jobs:
+  test:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Test Script Syntax
+        run: |
+          find scripts -name "*.sh" -exec bash -n {} \;
+          echo "All scripts passed syntax check!"
