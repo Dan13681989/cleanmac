@@ -35,3 +35,4 @@ logs/
 # CleanMac specific
 cleanmac_logs/
 *.log.*
+.nvm

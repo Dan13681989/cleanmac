@@ -1,2 +1,2 @@
-# CleanMac - macOS Cleanup Scripts
-Complete macOS cleanup and Docker management scripts.
+# CleanMac - macOS Scripts
+Professional cleanup scripts.
