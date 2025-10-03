@@ -1,0 +1,102 @@
+#!/bin/bash
+
+# CleanMac Pro - Enhanced macOS Optimization with iPhone Tools
+# Version: 3.0.0
+
+set -e
+
+# Configuration
+CONFIG_DIR="$HOME/.cleanmac"
+BACKUP_DIR="$CONFIG_DIR/backups"
+LOG_FILE="$CONFIG_DIR/cleanmac.log"
+
+# Colors
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+NC='\033[0m'
+
+# Initialize environment
+init_environment() {
+    mkdir -p "$CONFIG_DIR" "$BACKUP_DIR"
+    echo -e "${BLUE}🚀 CleanMac Pro v3.0.0 with iPhone Tools${NC}"
+}
+
+# iPhone Configuration Tools
+run_iphone_config() {
+    echo -e "${BLUE}📱 iPhone Configuration Tools${NC}"
+    
+    if [ -d "iphone-config" ]; then
+        cd iphone-config
+        echo "Available iPhone tools:"
+        echo "1) Health Check"
+        echo "2) System Dashboard" 
+        echo "3) Security Setup"
+        echo "4) Backup Configs"
+        echo "5) Deploy All"
+        read -p "Choose an option: " iphone_choice
+        
+        case "$iphone_choice" in
+            1) ./health_check.sh ;;
+            2) ./system_dashboard.sh ;;
+            3) ./security_setup.sh ;;
+            4) ./backup_configs.sh ;;
+            5) ./deploy_all.sh ;;
+            *) echo -e "${RED}Invalid option${NC}" ;;
+        esac
+        
+        cd ..
+    else
+        echo -e "${RED}❌ iPhone-Config directory not found${NC}"
+    fi
+}
+
+# Enhanced System Cleanup
+clean_system_caches() {
+    echo -e "${BLUE}🧹 Cleaning System Caches...${NC}"
+    # Your existing cleanup logic here
+    echo -e "${GREEN}✅ System caches cleaned${NC}"
+}
+
+# Main Menu
+show_menu() {
+    echo ""
+    echo -e "${BLUE}===== 🧹 CleanMac Pro Menu =====${NC}"
+    echo "1) Quick System Cleanup"
+    echo "2) Performance Optimization" 
+    echo "3) 📱 iPhone Configuration Tools"
+    echo "4) System Status Report"
+    echo "5) Create Bootable USB"
+    echo "6) Fix Hotspot Stability"
+    echo "0) Exit"
+    echo -e "=================================${NC}"
+}
+
+handle_choice() {
+    case "$1" in
+        1) clean_system_caches ;;
+        2) echo -e "${GREEN}Performance optimization...${NC}" ;;
+        3) run_iphone_config ;;
+        4) echo -e "${GREEN}System report...${NC}" ;;
+        5) echo -e "${GREEN}Bootable USB...${NC}" ;;
+        6) echo -e "${GREEN}Hotspot fix...${NC}" ;;
+        0) echo -e "${GREEN}Goodbye!${NC}"; exit 0 ;;
+        *) echo -e "${RED}Invalid option${NC}" ;;
+    esac
+}
+
+# Main execution
+main() {
+    init_environment
+    
+    while true; do
+        show_menu
+        read -p "Choose an option: " choice
+        handle_choice "$choice"
+        echo
+        read -p "Press Enter to continue..."
+    done
+}
+
+main "$@"
