@@ -1,0 +1,17 @@
+    # Add to show_menu function - find the existing menu and add this line:
+    echo "i) iPhone Configuration Tools"
+    
+    # Add to the case statement in handle_choice/cleanup_system:
+    i) run_iphone_config ;;
+    
+    # Then add this function somewhere before the main loop:
+    run_iphone_config() {
+        echo "[cleanmac] Starting iPhone Configuration Tools..."
+        if [ -f "iphone-config/iphone_control.sh" ]; then
+            cd iphone-config
+            ./iphone_control.sh
+            cd ..
+        else
+            echo "[cleanmac] iPhone tools not found!"
+        fi
+    }
