@@ -1,23 +1,30 @@
 ---
 name: Bug Report
-about: Report a bug or issue with CleanMac scripts
+about: Create a report to help us improve CleanMac
 title: '[BUG] '
 labels: bug
+assignees: ''
+
 ---
 
-## Description
+## 🐛 Bug Description
 Clear and concise description of the bug.
 
-## Steps to Reproduce
-1. Run command: 
-2. See error: 
+## 🔄 Steps to Reproduce
+1. 
+2. 
+3. 
 
-## Expected Behavior
-What should have happened?
+## ✅ Expected Behavior
+What should happen?
 
-## Environment
+## ❌ Actual Behavior
+What actually happens?
+
+## 📸 Screenshots
+If applicable, add screenshots to help explain your problem.
+
+## 💻 Environment
 - macOS Version: 
-- CleanMac Version: 
-
-## Additional Context
-Add any other context about the problem here.
+- CleanMac Version:
+- Shell (bash/zsh):
