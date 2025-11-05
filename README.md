@@ -55,3 +55,17 @@ Contributions welcome! Please feel free to submit pull requests or open issues.
 This project is licensed under the MIT License - see the LICENSE file for details.
 
 ⭐ If you find this useful, please give it a star!
+
+# CleanMac Pro v5.1.0 🚀
+
+## ✨ New Features
+- **Health Score**: Get your system health rating (1-100)
+- **Security Audit**: Comprehensive security check  
+- **One-Click Commands**: Simple commands that work anywhere
+- **Enhanced Installation**: Automatic system-wide setup
+
+## 🎯 One-Command Installation
+```bash
+curl -fsSL 
+https://raw.githubusercontent.com/Dan13681989/cleanmac/main/install.sh | 
+bash
