@@ -249,7 +249,12 @@ case "$1" in
     "--install")
         install_cleanmac
         ;;
-    "--help"|"")
+    "--version")
+        show_version
+        ;;
+    "--update")
+        self_update
+        ;;    "--help"|"")
         show_help
         ;;
     *)
@@ -257,3 +262,39 @@ case "$1" in
         show_help
         ;;
 esac
+
+# Version information
+CLEANMAC_VERSION="v5.1.0"
+
+# Version check function
+show_version() {
+    echo -e "${GREEN}CleanMac Pro ${CLEANMAC_VERSION}${NC}"
+    echo "Advanced macOS Optimization Suite"
+    echo "GitHub: https://github.com/Dan13681989/cleanmac"
+}
+
+# Self-update function
+self_update() {
+    echo -e "${YELLOW}🔄 Checking for updates...${NC}"
+    
+    # Download latest version
+    curl -fsSL https://raw.githubusercontent.com/Dan13681989/cleanmac/main/cleanmac_pro.sh -o /tmp/cleanmac_pro_latest.sh
+    
+    if [ $? -eq 0 ]; then
+        # Compare versions (simple check)
+        local current_hash=$(shasum cleanmac_pro.sh | cut -d' ' -f1)
+        local latest_hash=$(shasum /tmp/cleanmac_pro_latest.sh | cut -d' ' -f1)
+        
+        if [ "$current_hash" != "$latest_hash" ]; then
+            echo -e "${GREEN}✅ Update available! Installing...${NC}"
+            sudo cp /tmp/cleanmac_pro_latest.sh /usr/local/bin/cleanmac
+            sudo chmod +x /usr/local/bin/cleanmac
+            echo -e "${GREEN}✅ Updated successfully!${NC}"
+        else
+            echo -e "${GREEN}✅ You're running the latest version${NC}"
+        fi
+        rm -f /tmp/cleanmac_pro_latest.sh
+    else
+        echo -e "${RED}❌ Failed to check for updates${NC}"
+    fi
+}
