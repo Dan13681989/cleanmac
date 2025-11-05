@@ -69,3 +69,19 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 curl -fsSL 
 https://raw.githubusercontent.com/Dan13681989/cleanmac/main/install.sh | 
 bash
+
+## 🚀 Installation
+
+### One-Command Installation (Recommended)
+```bash
+curl -fsSL https://raw.githubusercontent.com/Dan13681989/cleanmac/main/install.sh | bash
+Alternative One-Command Installer
+
+bash
+curl -fsSL https://raw.githubusercontent.com/Dan13681989/cleanmac/main/one_command_install.sh | bash
+Manual Installation
+
+bash
+git clone https://github.com/Dan13681989/cleanmac.git
+cd cleanmac
+./cleanmac_pro.sh --install
