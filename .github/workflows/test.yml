@@ -1,0 +1,21 @@
+name: Test CleanMac
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: macos-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Test CleanMac Scripts
+      run: |
+        chmod +x *.sh
+        ./cleanmac_pro.sh --dry-run
+        ./cleanmac_pro.sh --sys-info
+        ./cleanmac_pro.sh --sip-status
