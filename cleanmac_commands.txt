@@ -1,0 +1,22 @@
+CLEANMAC QUICK REFERENCE
+=======================
+
+SYSTEM INFORMATION:
+  sysinfo      - System hardware & OS info
+  diskinfo     - Storage usage analysis  
+  sip-status   - Security status check
+
+TIME MACHINE:
+  tm-status    - Check backup status
+  tm-start     - Start backup
+  tm-stop      - Stop backup  
+  tm-list      - List backups
+
+CLEANING OPERATIONS:
+  clean-preview - See what will be cleaned
+  quickclean    - Fast cleanup (brew, npm, docker)
+  cleanall      - Full system cleanup
+  maintenance   - Complete system check + cleaning
+
+SECURITY:
+  sip-help     - Recovery mode instructions
