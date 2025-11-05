@@ -247,7 +247,12 @@ case "$1" in
         verify_backup
         ;;
     "--install")
-        install_cleanmac
+    "--version")
+        show_version
+        ;;
+    "--update")
+        self_update
+        ;;        install_cleanmac
         ;;
     "--version")
         show_version
