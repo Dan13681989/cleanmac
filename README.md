@@ -1,87 +1,51 @@
-# 🛡️ CleanMac Pro
+# 🛡️ CleanMac - Advanced macOS Optimization Suite
 
-[![GitHub stars](https://img.shields.io/github/stars/Dan13681989/cleanmac)](https://github.com/Dan13681989/cleanmac/stargazers)
-[![License](https://img.shields.io/github/license/Dan13681989/cleanmac)](LICENSE)
-[![Last Commit](https://img.shields.io/github/last-commit/Dan13681989/cleanmac)](https://github.com/Dan13681989/cleanmac/commits/main)
-
-> Advanced macOS optimization suite featuring system cleanup, security monitoring, and maintenance automation.
+Professional-grade macOS maintenance and optimization toolkit featuring comprehensive system cleanup, security monitoring, and performance enhancement.
 
 ## ✨ Features
 
-- **🧹 System Cleanup** - Remove cache, logs, and temporary files
-- **🛡️ SIP Management** - Check and manage System Integrity Protection  
-- **💾 Time Machine Control** - Start/stop/status backups
-- **📊 System Monitoring** - Hardware and storage analysis
-- **⚡ Quick Optimization** - Fast cleanup for daily use
+### 🔧 System Optimization
+- **Deep System Cleanup** - Remove cache, logs, and temporary files
+- **Storage Analysis** - Identify large files and duplicates
+- **Performance Monitoring** - Real-time system resource tracking
+- **Automated Maintenance** - Scheduled cleanup tasks
+
+### 🛡️ Security & Privacy
+- **Security Audit** - Scan for vulnerabilities
+- **Privacy Protection** - Clean browsing history and tracking data
+- **Malware Detection** - Basic threat scanning
+- **Firewall Monitoring** - Network security status
+
+### 📱 iPhone Integration
+- **Device Backup Management**
+- **Storage Optimization**
+- **Cross-device Sync Monitoring**
 
 ## 🚀 Quick Start
 
 ```bash
-# Clone the repository
-git clone https://github.com/Dan13681989/cleanmac.git
-cd cleanmac
+# Make executable and run
+chmod +x cleanmac_advanced.sh
+./cleanmac_advanced.sh
+📦 Installation
 
-# Make scripts executable
-chmod +x cleanmac_pro.sh
+Prerequisites
 
-# Run the main script
-./cleanmac_pro.sh --help
-📋 Usage
-
-System Information
+macOS 11.0 or later
+Administrator privileges
+🎯 Usage Examples
 
 bash
-./cleanmac_pro.sh --sys-info      # System overview
-./cleanmac_pro.sh --disk-info     # Storage analysis
-./cleanmac_pro.sh --sip-status    # Security status
-Cleaning Operations
+# Full system optimization
+./cleanmac_advanced.sh --full
 
-bash
-./cleanmac_pro.sh --clean         # Full system cleanup
-./cleanmac_pro.sh --quick-clean   # Fast optimization
-./cleanmac_pro.sh --dry-run       # Preview cleanup
-Time Machine
+# Quick cleanup only
+./cleanmac_advanced.sh --quick
 
-bash
-./cleanmac_pro.sh --tm-status     # Backup status
-./cleanmac_pro.sh --tm-start      # Start backup
-./cleanmac_pro.sh --tm-list       # List backups
-🤝 Contributing
-
-Contributions welcome! Please feel free to submit pull requests or open issues.
-
+# Security audit only
+./cleanmac_advanced.sh --security
 📄 License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+MIT License - see LICENSE for details.
 
-⭐ If you find this useful, please give it a star!
-
-# CleanMac Pro v5.1.0 🚀
-
-## ✨ New Features
-- **Health Score**: Get your system health rating (1-100)
-- **Security Audit**: Comprehensive security check  
-- **One-Click Commands**: Simple commands that work anywhere
-- **Enhanced Installation**: Automatic system-wide setup
-
-## 🎯 One-Command Installation
-```bash
-curl -fsSL 
-https://raw.githubusercontent.com/Dan13681989/cleanmac/main/install.sh | 
-bash
-
-## 🚀 Installation
-
-### One-Command Installation (Recommended)
-```bash
-curl -fsSL https://raw.githubusercontent.com/Dan13681989/cleanmac/main/install.sh | bash
-Alternative One-Command Installer
-
-bash
-curl -fsSL https://raw.githubusercontent.com/Dan13681989/cleanmac/main/one_command_install.sh | bash
-Manual Installation
-
-bash
-git clone https://github.com/Dan13681989/cleanmac.git
-cd cleanmac
-./cleanmac_pro.sh --install
+Maintained by Dan
