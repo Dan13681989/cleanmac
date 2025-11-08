@@ -86,7 +86,7 @@ show_system_info() {
     echo "Processor: $(sysctl -n machdep.cpu.brand_string)"
     echo "OS: $(sw_vers -productName) $(sw_vers -productVersion)"
     echo "Build: $(sw_vers -buildVersion)"
-    echo "Uptime: $(uptime | awk -F'( |,|:)+' '{if (NF>10) print $6,$7",",$8,"hours,",$9,"minutes."; else print "recently"}')"
+    echo "Uptime: $(uptime | awk -F'( |,|:)+' '{print $6,$7",",$8,"hours,",$9,"minutes."}')"
     echo ""
 }
 
@@ -120,26 +120,18 @@ calculate_health_score() {
         echo -e "${GREEN}✅ Disk space good: ${disk_usage}% used${NC}"
     fi
     
-    # Check system load (fixed version)
+    # Check system load
     local load=$(sysctl -n vm.loadavg | awk '{print $2}')
     local cores=$(sysctl -n hw.ncpu)
-    # Use bc for floating point comparison if available, else use simple comparison
-    if command -v bc >/dev/null 2>&1; then
-        if (( $(echo "$load > $cores" | bc -l) )); then
+    if [ $(echo "$load > $cores" | bc 2>/dev/null) ] || [ -z "$(which bc)" ]; then
+        if [ $load -gt $cores ]; then
             score=$((score - 10))
             echo -e "${YELLOW}⚠️  System load high: $load${NC}"
         else
             echo -e "${GREEN}✅ System load normal: $load${NC}"
         fi
     else
-        # Simple integer comparison as fallback
-        local load_int=${load%.*}
-        if [ $load_int -gt $cores ]; then
-            score=$((score - 10))
-            echo -e "${YELLOW}⚠️  System load high: $load${NC}"
-        else
-            echo -e "${GREEN}✅ System load normal: $load${NC}"
-        fi
+        echo -e "${GREEN}✅ System load normal: $load${NC}"
     fi
     
     # Display final score
@@ -166,7 +158,7 @@ security_audit() {
     
     # Check firewall
     echo -e "${BLUE}Firewall Status:${NC}"
-    if sudo /usr/libexec/ApplicationFirewall/socketfilterfw --getglobalstate 2>/dev/null | grep -q "Enabled"; then
+    if sudo /usr/libexec/ApplicationFirewall/socketfilterfw --getglobalstate | grep -q "Enabled"; then
         echo -e "${GREEN}✅ Firewall is enabled${NC}"
     else
         echo -e "${RED}❌ Firewall is disabled${NC}"

@@ -66,7 +66,7 @@ show_help() {
     echo "Time Machine:"
     echo "  --tm-status     Time Machine status"
     echo "  --verify-backup Verify backup"
-    echo ""
+  --quick-clean    Fast system cleanup    echo ""
     echo "Installation:"
     echo "  --install       Install system-wide"
     echo ""
@@ -86,7 +86,7 @@ show_system_info() {
     echo "Processor: $(sysctl -n machdep.cpu.brand_string)"
     echo "OS: $(sw_vers -productName) $(sw_vers -productVersion)"
     echo "Build: $(sw_vers -buildVersion)"
-    echo "Uptime: $(uptime | awk -F'( |,|:)+' '{if (NF>10) print $6,$7",",$8,"hours,",$9,"minutes."; else print "recently"}')"
+    echo "Uptime: $(uptime | awk -F'( |,|:)+' '{print $6,$7",",$8,"hours,",$9,"minutes."}')"
     echo ""
 }
 
@@ -101,6 +101,47 @@ check_sip_status() {
     echo -e "${BLUE}🛡️  System Integrity Protection:${NC}"
     csrutil status | head -1
 }
+
+# Install function
+install_cleanmac() {
+    echo -e "${YELLOW}🚀 Installing CleanMac Pro system-wide...${NC}"
+    sudo cp "$0" /usr/local/bin/cleanmac
+    sudo chmod +x /usr/local/bin/cleanmac
+    echo -e "${GREEN}✅ CleanMac Pro installed successfully!${NC}"
+    echo ""
+    echo "Usage: cleanmac [OPTION]"
+    echo "Try: cleanmac --help"
+}
+
+# Main argument parsing
+case $1 in
+    "--install")
+        install_cleanmac
+        ;;
+    "--version")
+        show_version
+        ;;
+    "--update")
+        self_update
+        ;;
+    "--sys-info")
+        show_system_info
+        ;;
+    "--disk-info")
+        show_disk_info
+        ;;
+    "--sip-status")
+        check_sip_status
+        ;;
+    "--help"|"")
+        show_help
+        ;;
+    *)
+        echo -e "${RED}❌ Unknown option: $1${NC}"
+        show_help
+        exit 1
+        ;;
+esac
 
 # Health Score function
 calculate_health_score() {
@@ -120,26 +161,27 @@ calculate_health_score() {
         echo -e "${GREEN}✅ Disk space good: ${disk_usage}% used${NC}"
     fi
     
-    # Check system load (fixed version)
+    # Check memory pressure
+    if memory_pressure=$(memory_pressure 2>/dev/null); then
+        if echo "$memory_pressure" | grep -q "System-wide memory free percentage:"; then
+            local mem_free=$(echo "$memory_pressure" | grep "System-wide memory free percentage:" | awk '{print $5}' | sed 's/%//')
+            if [ $(echo "$mem_free < 10" | bc -l 2>/dev/null) ]; then
+                score=$((score - 15))
+                echo -e "${RED}❌ Memory pressure high${NC}"
+            else
+                echo -e "${GREEN}✅ Memory pressure normal${NC}"
+            fi
+        fi
+    fi
+    
+    # Check system load
     local load=$(sysctl -n vm.loadavg | awk '{print $2}')
     local cores=$(sysctl -n hw.ncpu)
-    # Use bc for floating point comparison if available, else use simple comparison
-    if command -v bc >/dev/null 2>&1; then
-        if (( $(echo "$load > $cores" | bc -l) )); then
-            score=$((score - 10))
-            echo -e "${YELLOW}⚠️  System load high: $load${NC}"
-        else
-            echo -e "${GREEN}✅ System load normal: $load${NC}"
-        fi
+    if [ $(echo "$load > $cores" | bc -l 2>/dev/null) ]; then
+        score=$((score - 10))
+        echo -e "${YELLOW}⚠️  System load high: $load${NC}"
     else
-        # Simple integer comparison as fallback
-        local load_int=${load%.*}
-        if [ $load_int -gt $cores ]; then
-            score=$((score - 10))
-            echo -e "${YELLOW}⚠️  System load high: $load${NC}"
-        else
-            echo -e "${GREEN}✅ System load normal: $load${NC}"
-        fi
+        echo -e "${GREEN}✅ System load normal: $load${NC}"
     fi
     
     # Display final score
@@ -166,7 +208,7 @@ security_audit() {
     
     # Check firewall
     echo -e "${BLUE}Firewall Status:${NC}"
-    if sudo /usr/libexec/ApplicationFirewall/socketfilterfw --getglobalstate 2>/dev/null | grep -q "Enabled"; then
+    if sudo /usr/libexec/ApplicationFirewall/socketfilterfw --getglobalstate | grep -q "Enabled"; then
         echo -e "${GREEN}✅ Firewall is enabled${NC}"
     else
         echo -e "${RED}❌ Firewall is disabled${NC}"
@@ -197,38 +239,11 @@ check_tm_status() {
     
     if tmutil destinationinfo | grep -q "Mount Point"; then
         echo -e "${GREEN}✅ Time Machine is configured${NC}"
-    else
-        echo -e "${RED}❌ Time Machine not configured${NC}"
-    fi
-}
-
-# Quick Clean function
-quick_clean() {
-    echo -e "${YELLOW}🧹 Running quick clean...${NC}"
-    
-    # Clear user caches
-    echo -e "${BLUE}Clearing user caches...${NC}"
-    find ~/Library/Caches -type f -delete 2>/dev/null
-    echo -e "${GREEN}✅ User caches cleared${NC}"
-    
-    # Clear temporary files
-    echo -e "${BLUE}Clearing temporary files...${NC}"
-    rm -rf /tmp/* 2>/dev/null
-    echo -e "${GREEN}✅ Temporary files cleared${NC}"
-    
-    echo -e "${GREEN}✅ Quick clean completed!${NC}"
-}
-
-# Install function
-install_cleanmac() {
-    echo -e "${YELLOW}🚀 Installing CleanMac Pro system-wide...${NC}"
-    sudo cp "$0" /usr/local/bin/cleanmac
-    sudo chmod +x /usr/local/bin/cleanmac
-    echo -e "${GREEN}✅ CleanMac Pro installed successfully!${NC}"
-    echo ""
-    echo "Usage: cleanmac [OPTION]"
-    echo "Try: cleanmac --help"
-}
+        
+        # Get last backup
+        local last_backup=$(tmutil latestbackup 2>/dev/null)
+        if [ -n "$last_backup" ]; then
+            local backup_date=$(basename "$last_backup" | cut -d- -f2-4)
 
 # Main argument parsing
 case $1 in

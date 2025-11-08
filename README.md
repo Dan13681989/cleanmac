@@ -25,8 +25,8 @@ Professional-grade macOS maintenance and optimization toolkit featuring comprehe
 
 ```bash
 # Make executable and run
-chmod +x cleanmac_advanced.sh
-./cleanmac_advanced.sh
+chmod +x cleanmac_pro.sh
+./cleanmac_pro.sh
 📦 Installation
 
 Prerequisites
@@ -37,13 +37,13 @@ Administrator privileges
 
 bash
 # Full system optimization
-./cleanmac_advanced.sh --full
+./cleanmac_pro.sh --full
 
 # Quick cleanup only
-./cleanmac_advanced.sh --quick
+./cleanmac_pro.sh --quick
 
 # Security audit only
-./cleanmac_advanced.sh --security
+./cleanmac_pro.sh --security
 📄 License
 
 MIT License - see LICENSE for details.
